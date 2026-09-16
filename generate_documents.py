@@ -236,8 +236,27 @@ def is_paid(value: str) -> bool:
 
 
 def safe_name(value: str) -> str:
-    value = re.sub(r"[^A-Za-z0-9_.-]+", "_", value.strip())
+    value = re.sub(r"[^\w.-]+", "_", value.strip(), flags=re.UNICODE)
     return value.strip("_.") or "registration"
+
+
+def registration_filename(registration: dict[str, Any]) -> str:
+    first_name = field_value(
+        registration.get("first_name") or registration.get("firstname")
+    )
+    family_name = field_value(
+        registration.get("last_name")
+        or registration.get("family_name")
+        or registration.get("familyname")
+    )
+    if first_name or family_name:
+        return "_".join(safe_name(name) for name in (first_name, family_name) if name)
+
+    full_name = field_value(registration.get("full_name"))
+    if full_name:
+        return safe_name(full_name)
+
+    return safe_name(field_value(registration.get("id")))
 
 
 def as_money(value: str) -> Decimal:
@@ -448,7 +467,7 @@ def main() -> int:
         reg_id = cell(row, config, "registration_id")
         if not reg_id:
             raise ValueError("Indico returned a registration without an ID")
-        base = safe_name(reg_id)
+        base = registration_filename(registration)
         requested = is_true(
             cell(row, config, "invoice_requested"),
             config.get("generate_invoice_by_default", True),

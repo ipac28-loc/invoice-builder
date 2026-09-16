@@ -2,8 +2,8 @@
 
 This command-line tool retrieves registrations directly from Indico 3.3 and creates two independent English PDF documents:
 
-- `Invoice_<Registration ID>.pdf`
-- `Payment_Certificate_<Registration ID>.pdf` (only for a paid registration)
+- `Invoice_<First name>_<Family name>.pdf`
+- `Payment_Certificate_<First name>_<Family name>.pdf` (only for a paid registration)
 
 No CSV export is required. The invoice is a normal invoice; payment is evidenced separately by the payment certificate.
 
