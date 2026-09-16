@@ -1,0 +1,64 @@
+{
+  "issuer": {
+    "name": "IPAC'28 Local Organizing Committee",
+    "address": "Tsukuba, Japan",
+    "email": "contact@ipac28.org",
+    "tax_registration_number": ""
+  },
+  "event": {
+    "name": "JACoW Team Meeting 2026",
+    "short_name": "JTM2026",
+    "dates": "19-22 Oct 2026",
+    "venue": "KEK, Tsukuba, Japan",
+    "default_description": "JTM2026 Registration Fee"
+  },
+  "indico": {
+    "base_url": "https://indico.jacow.org",
+    "event_id": 119,
+    "registration_form_id": 132,
+    "token_env": "INDICO_API_TOKEN",
+    "verify_tls": true,
+    "timeout_seconds": 30,
+    "parallel_requests": 8
+  },
+  "numbering": {
+    "invoice": "JTM2026-INV-{registration_id}",
+    "certificate": "JTM2026-PAY-{registration_id}"
+  },
+  "default_currency": "JPY",
+  "tax_label": "Tax",
+  "generate_invoice_by_default": true,
+  "excluded_registration_states": ["rejected", "withdrawn"],
+  "invoice_note": "This invoice is generated from the conference registration record. A separate payment certificate is issued when payment has been received.",
+  "certificate_note": "This certificate confirms receipt of payment and is not a request for payment.",
+  "font": {
+    "regular": "",
+    "bold": ""
+  },
+  "api_fields": {
+    "affiliation": "Affiliation",
+    "billing_name": "Invoice Addressee",
+    "billing_address": "Invoice Address",
+    "invoice_requested": "Invoice Requested",
+    "invoice_date": "",
+    "description": "",
+    "tax_amount": "",
+    "payment_reference": ""
+  },
+  "columns": {
+    "registration_id": "Registration ID",
+    "participant_name": "Participant Name",
+    "affiliation": "Affiliation",
+    "billing_name": "Invoice Addressee",
+    "billing_address": "Invoice Address",
+    "description": "Description",
+    "amount": "Amount",
+    "tax_amount": "Tax Amount",
+    "currency": "Currency",
+    "invoice_date": "Invoice Date",
+    "invoice_requested": "Invoice Requested",
+    "payment_status": "Payment Status",
+    "payment_date": "Payment Date",
+    "payment_reference": "Payment Reference"
+  }
+}
