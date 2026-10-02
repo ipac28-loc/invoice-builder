@@ -179,6 +179,10 @@ def registration_to_row(registration: dict[str, Any], config: dict[str, Any]) ->
         title = api_fields.get(logical_name, "")
         return fields_by_title.get(title, "") if title else ""
 
+    payment_date = registration.get("payment_date")
+    registration_date = registration.get("registration_date")
+    invoice_date = custom("invoice_date") or registration_date or payment_date or ""
+
     logical_values = {
         "registration_id": str(registration.get("id", "")),
         "participant_name": field_value(registration.get("full_name")),
@@ -189,10 +193,10 @@ def registration_to_row(registration: dict[str, Any], config: dict[str, Any]) ->
         "amount": field_value(registration.get("price")),
         "tax_amount": custom("tax_amount") or "0",
         "currency": field_value(registration.get("currency")) or config.get("default_currency", "JPY"),
-        "invoice_date": display_date(custom("invoice_date"), default_today=True),
+        "invoice_date": display_date(invoice_date, default_today=False),
         "invoice_requested": custom("invoice_requested"),
         "payment_status": "Paid" if registration.get("is_paid") else "Unpaid",
-        "payment_date": display_date(registration.get("payment_date")),
+        "payment_date": display_date(payment_date),
         "payment_reference": custom("payment_reference"),
     }
     return {
