@@ -408,6 +408,10 @@ def make_certificate(row: dict[str, str], config: dict[str, Any], out: Path, reg
     amount = as_money(cell(row, config, "amount")) + as_money(cell(row, config, "tax_amount"))
     participant = cell(row, config, "participant_name")
     affiliation = cell(row, config, "affiliation")
+
+    billing_name = cell(row, config, "billing_name") or participant
+    billing_address = cell(row, config, "billing_address")
+
     description = cell(row, config, "description") or config["event"].get("default_description", "Registration fee")
     payment_date = cell(row, config, "payment_date")
     reference = cell(row, config, "payment_reference")
@@ -420,10 +424,18 @@ def make_certificate(row: dict[str, str], config: dict[str, Any], out: Path, reg
         ("Related invoice", invoice_number),
         ("Participant", participant),
         ("Affiliation", affiliation),
+        ("Receipt issued to", billing_name),
+    ]
+
+    if billing_address:
+        details.append(("Billing address", billing_address))
+
+    details.extend([
         ("Description", description),
         ("Amount received", money(amount, currency)),
         ("Payment date", payment_date),
-    ]
+    ])
+    
     if reference:
         details.append(("Payment reference", reference))
     rows = [[Paragraph(esc(label), s["label"]), Paragraph(esc(value), s["body"])] for label, value in details]
