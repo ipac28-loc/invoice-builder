@@ -1,0 +1,10 @@
+# Local operational configuration and generated personal data
+/config.json
+/output/
+
+# Local credentials and Python environment
+.env
+.env.*
+.venv/
+__pycache__/
+*.py[cod]

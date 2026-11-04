@@ -53,11 +53,19 @@ python -m pip install -r requirements.txt
 
 ## 4. Configure the event
 
-Edit `config.json`:
+Copy the public example configuration to a local operational file, then edit `config.json`:
+
+```bash
+cp config.example.json config.json
+```
+
+`config.example.json` contains fictional examples. The local `config.json` and the default `output/` directory are excluded from Git.
+
+Configure the connection:
 
 ```json
 "indico": {
-  "base_url": "https://indico.pasj.jp",
+  "base_url": "https://indico.example.org",
   "event_id": 123,
   "registration_form_id": 456,
   "token_env": "INDICO_API_TOKEN",
@@ -78,6 +86,28 @@ python generate_documents.py --config config.json --list-forms
 Then put the displayed form ID in `registration_form_id`.
 
 Also replace the sample issuer name, postal address, and email. Add a tax-registration number only if applicable. Confirm tax treatment with the conference accounting officer.
+
+### Override payment-certificate billing details
+
+Use the optional top-level `receipt_overrides` object in `config.json` to customize a payment certificate for a specific registration. Each key must be the registration ID as a JSON string:
+
+```json
+"receipt_overrides": {
+  "1028": {
+    "billing_name": "Example Research Institute",
+    "billing_address": "1 Example Street\nExample City\nExample Country",
+    "vat_number": "EXAMPLE-VAT-NUMBER"
+  }
+}
+```
+
+- `billing_name` replaces the certificate's `Receipt issued to` value.
+- `billing_address` replaces its `Billing address`; use `\n` for line breaks.
+- `vat_number` adds a `VAT number` row when nonempty. This is the recipient's VAT number, separate from `issuer.tax_registration_number`.
+
+Omitted billing fields retain their registration values; if no billing name is available, the participant's name is used. An explicitly empty string clears the corresponding value, and an empty billing address or VAT number is omitted from the certificate. VAT numbers are read only from `receipt_overrides`.
+
+These overrides affect payment certificates only. Invoices continue to use the registration's billing details, and participant names and PDF filenames are unchanged. Overrides do not update Indico or change payment status: a certificate is still generated only for a paid registration. Remove an entry to restore the registration's billing details, or omit `receipt_overrides` entirely when no overrides are needed.
 
 ## 5. Generate PDFs
 
@@ -105,6 +135,17 @@ output/invoices/
 output/payment_certificates/
 ```
 
+After changing an override, regenerate that registration with `--registration-id`:
+
+```bash
+python generate_documents.py \
+  --config config.json \
+  --registration-id 1028 \
+  --output-dir output
+```
+
+This command follows the normal generation rules for both document types and overwrites existing PDFs with the same filenames in the output directory.
+
 ## Generation rules
 
 - Rejected and withdrawn registrations are skipped by default.
@@ -119,6 +160,9 @@ output/payment_certificates/
 
 - TLS certificate verification is always enforced.
 - Keep the token and generated personal data outside public web directories.
+- Commit only fictional settings in `config.example.json`. Keep real recipient details, addresses, VAT numbers, and registration IDs in the ignored local `config.json`.
+- Keep generated PDFs out of Git. If you choose a custom `--output-dir`, add that directory to `.gitignore` before generating documents.
+- Ignoring or untracking a file does not remove earlier committed versions. Review Git history before making the repository public; previously committed settings and PDFs may remain accessible in old commits.
 - Restrict the output directory and service account permissions.
 - Use a dedicated personal token for this program so it can be revoked independently.
 - Regenerate only the necessary registration with `--registration-id` during routine support work.

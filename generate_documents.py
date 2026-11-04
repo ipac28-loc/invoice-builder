@@ -412,6 +412,13 @@ def make_certificate(row: dict[str, str], config: dict[str, Any], out: Path, reg
     billing_name = cell(row, config, "billing_name") or participant
     billing_address = cell(row, config, "billing_address")
 
+    # Apply receipt-specific overrides
+    override = config.get("receipt_overrides", {}).get(str(reg_id), {})
+
+    billing_name = override.get("billing_name", billing_name)
+    billing_address = override.get("billing_address", billing_address)
+    vat_number = override.get("vat_number", "")
+
     description = cell(row, config, "description") or config["event"].get("default_description", "Registration fee")
     payment_date = cell(row, config, "payment_date")
     reference = cell(row, config, "payment_reference")
@@ -430,12 +437,15 @@ def make_certificate(row: dict[str, str], config: dict[str, Any], out: Path, reg
     if billing_address:
         details.append(("Billing address", billing_address))
 
+    if vat_number:
+        details.append(("VAT number", vat_number))
+
     details.extend([
         ("Description", description),
         ("Amount received", money(amount, currency)),
         ("Payment date", payment_date),
     ])
-    
+
     if reference:
         details.append(("Payment reference", reference))
     rows = [[Paragraph(esc(label), s["label"]), Paragraph(esc(value), s["body"])] for label, value in details]

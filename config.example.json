@@ -1,0 +1,74 @@
+{
+  "issuer": {
+    "name": "Example Conference Organizing Committee",
+    "address": "1 Example Street\nExample City\nExample Country",
+    "email": "organizer@example.org",
+    "tax_registration_number": ""
+  },
+  "event": {
+    "name": "Example Conference 2026",
+    "short_name": "EXAMPLE2026",
+    "dates": "1-3 December 2026",
+    "venue": "Example City",
+    "default_description": "Example Conference Registration Fee"
+  },
+  "indico": {
+    "base_url": "https://indico.example.org",
+    "event_id": 123,
+    "registration_form_id": 456,
+    "token_env": "INDICO_API_TOKEN",
+    "verify_tls": true,
+    "timeout_seconds": 30,
+    "parallel_requests": 8
+  },
+  "numbering": {
+    "invoice": "EXAMPLE2026-INV-{registration_id}",
+    "certificate": "EXAMPLE2026-PAY-{registration_id}"
+  },
+  "default_currency": "JPY",
+  "tax_label": "Tax",
+  "generate_invoice_by_default": true,
+  "excluded_registration_states": [
+    "rejected",
+    "withdrawn"
+  ],
+  "invoice_note": "This invoice is generated from the conference registration record. A separate payment certificate is issued when payment has been received.",
+  "certificate_note": "This certificate confirms receipt of payment and is not a request for payment.",
+  "font": {
+    "regular": "",
+    "bold": ""
+  },
+  "api_fields": {
+    "affiliation": "Affiliation",
+    "billing_name": "Invoice Addressee",
+    "billing_address": "Invoice Address",
+    "invoice_requested": "Invoice Requested",
+    "invoice_date": "",
+    "description": "",
+    "tax_amount": "",
+    "payment_reference": ""
+  },
+  "columns": {
+    "registration_id": "Registration ID",
+    "participant_name": "Participant Name",
+    "affiliation": "Affiliation",
+    "billing_name": "Invoice Addressee",
+    "billing_address": "Invoice Address",
+    "description": "Description",
+    "amount": "Amount",
+    "tax_amount": "Tax Amount",
+    "currency": "Currency",
+    "invoice_date": "Invoice Date",
+    "invoice_requested": "Invoice Requested",
+    "payment_status": "Payment Status",
+    "payment_date": "Payment Date",
+    "payment_reference": "Payment Reference"
+  },
+  "receipt_overrides": {
+    "1028": {
+      "billing_name": "Example Research Institute",
+      "billing_address": "1 Example Street\nExample City\nExample Country",
+      "vat_number": "EXAMPLE-VAT-NUMBER"
+    }
+  }
+}
